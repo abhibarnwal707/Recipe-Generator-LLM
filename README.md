@@ -21,7 +21,9 @@ This LLM-powered application utilizes user-provided dietary preferences and avai
 - **Step-by-Step Instructions:** Offer detailed cooking instructions for the suggested recipes.
 
 ## How to Run
-**Before proceeding**, download the recipe dataset from the `recipe_dataset` folder.
+
+**Before proceeding**, download the recipe dataset from the [Google Drive](https://drive.google.com/drive/folders/13RdcLZ_CXfrZ-H39jzQgqz_DnC9z2S9B?usp=sharing) link.
+
 
 
 ### Using Docker
