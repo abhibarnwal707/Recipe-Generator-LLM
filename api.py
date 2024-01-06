@@ -3,6 +3,7 @@ import pathway as pw
 import os
 from dotenv import load_dotenv
 from common.prompt import prompt
+from fuzzywuzzy import fuzz
 
 # Load environment variables from .env file
 load_dotenv()
@@ -35,12 +36,15 @@ def get_recipe_suggestions(user_input):
     # Load the dataset containing recipe information
     recipes_df = pd.read_csv(dataset_path)
 
-    # Filter recipes based on the user's query matching relevant columns (e.g., name, tags, description, ingredients)
+    # Fuzzy search threshold (adjust as needed for better matches)
+    fuzzy_threshold = 80
+
+    # Filter recipes based on fuzzy matching with the user's query
     filtered_recipes = recipes_df[
-        (recipes_df['name'].str.contains(user_input['query'], case=False)) |
-        (recipes_df['tags'].str.contains(user_input['query'], case=False)) |
-        (recipes_df['description'].str.contains(user_input['query'], case=False)) |
-        (recipes_df['ingredients'].str.contains(user_input['query'], case=False))
+        (recipes_df['name'].apply(lambda x: fuzz.token_sort_ratio(x.lower(), user_input['query'].lower())) > fuzzy_threshold) |
+        (recipes_df['tags'].apply(lambda x: fuzz.token_sort_ratio(' '.join(x).lower(), user_input['query'].lower())) > fuzzy_threshold) |
+        (recipes_df['description'].apply(lambda x: fuzz.token_sort_ratio(x.lower(), user_input['query'].lower())) > fuzzy_threshold) |
+        (recipes_df['ingredients'].apply(lambda x: fuzz.token_sort_ratio(' '.join(x).lower(), user_input['query'].lower())) > fuzzy_threshold)
     ]
 
     # Convert the filtered recipes to a list of dictionaries for easier handling
@@ -66,3 +70,4 @@ def format_recipes(recipes):
 # Entry point to run the LLM App
 if __name__ == "__main__":
     run("localhost", 8080)  # Replace host and port with your desired values
+
