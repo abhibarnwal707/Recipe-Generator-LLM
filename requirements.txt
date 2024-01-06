@@ -2,6 +2,7 @@ pathway
 llm_app
 unstructured[all-docs]==0.10.15
 tiktoken
+fuzzywuzzy
 requests
 datetime
 streamlit
